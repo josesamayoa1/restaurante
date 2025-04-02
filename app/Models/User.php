@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'edad',
+        'role_id',
     ];
 
     /**
@@ -57,4 +59,39 @@ class User extends Authenticatable
             ->map(fn (string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
     }
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function cortes()
+    {
+        return $this->hasMany(Corte::class);
+    }
+
+    public function ordenes()
+    {
+        return $this->hasMany(Orden::class, 'mesero_id');
+    }
+
+    public function isAdmin()
+    {
+        return $this->role_id === 1;
+    }
+
+    public function isCajero()
+    {
+        return $this->role_id === 2;
+    }
+
+    public function isMesero()
+    {
+        return $this->role_id === 3;
+    }
+
+    public function isCocinero()
+    {
+        return $this->role_id === 4;
+    }
+
 }
