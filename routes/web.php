@@ -21,4 +21,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 
+
+Route::post('/test', function () {
+    return 'Hello World';
+});
+
 require __DIR__.'/auth.php';
