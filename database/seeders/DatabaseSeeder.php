@@ -15,10 +15,10 @@ class DatabaseSeeder extends Seeder
     {
         // Roles
         $roles = [
-            ['nombre' => 'admin'],
-            ['nombre' => 'cajero'],
-            ['nombre' => 'mesero'],
-            ['nombre' => 'cocinero'],
+            ['name' => 'admin', 'guard_name' => 'web'],
+            ['name' => 'cajero', 'guard_name' => 'web'],
+            ['name' => 'mesero', 'guard_name' => 'web'],
+            ['name' => 'cocinero', 'guard_name' => 'web'],
         ];
 
         foreach ($roles as $role) {
@@ -26,44 +26,44 @@ class DatabaseSeeder extends Seeder
         }
 
         // Admin user
-        User::create([
+        $admin = User::create([
             'nombre' => 'Admin',
             'apellidos' => 'Restaurante',
             'edad' => 30,
-            'role_id' => 1,
             'email' => 'admin@restaurante.com',
             'password' => bcrypt('password'),
         ]);
+        $admin->assignRole('admin');
 
         // Cajero
-        User::create([
+        $cajero = User::create([
             'nombre' => 'Juan',
             'apellidos' => 'Perez',
             'edad' => 25,
-            'role_id' => 2,
             'email' => 'cajero@restaurante.com',
             'password' => bcrypt('password'),
         ]);
+        $cajero->assignRole('cajero');
 
         // Mesero
-        User::create([
+        $mesero = User::create([
             'nombre' => 'Maria',
             'apellidos' => 'Gomez',
             'edad' => 28,
-            'role_id' => 3,
             'email' => 'mesero@restaurante.com',
             'password' => bcrypt('password'),
         ]);
+        $mesero->assignRole('mesero');
 
         // Cocinero
-        User::create([
+        $cocinero = User::create([
             'nombre' => 'Carlos',
             'apellidos' => 'Lopez',
             'edad' => 35,
-            'role_id' => 4,
             'email' => 'cocinero@restaurante.com',
             'password' => bcrypt('password'),
         ]);
+        $cocinero->assignRole('cocinero');
 
         // Cajas
         Caja::create(['nombre' => 'Caja Principal']);

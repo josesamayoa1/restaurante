@@ -19,11 +19,9 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
 
-
             $table->string('nombre')->nullable();
             $table->string('apellidos')->nullable();
             $table->integer('edad')->nullable();
-            $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('cascade');
 
             $table->timestamps();
         });

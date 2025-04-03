@@ -16,7 +16,7 @@ return new class extends Migration
             $table->decimal('saldo_inicial')->nullable();
             $table->decimal('saldo_final')->nullable();
             $table->foreignId('caja_id')->constrained('cajas');
-            $table->foreignId('usuario_id')->constrained('usuarios');
+            $table->foreignId('usuario_id')->constrained('users');
             $table->datetime('fecha')->nullable();
             $table->timestamps();
         });

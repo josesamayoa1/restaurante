@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 use App\Livewire\Roles\Index as RolesIndex;
 use App\Livewire\Cajas\Index as CajasIndex;
 use App\Livewire\Cortes\Index as CortesIndex;
@@ -10,9 +11,7 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::redirect('/', '/dashboard')->name('home');
 
 // Rutas de autenticación
 require __DIR__.'/auth.php';
@@ -23,10 +22,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')
         ->name('dashboard');
 
+
+
+
     // Configuración de usuario
 
-        Route::redirect('/', 'settings/profile');
-        Route::get('settings/profile', Profile::class)->name('settings.profile');
+    Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 
@@ -57,7 +58,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
-// Ruta de prueba (puedes eliminarla si no la necesitas)
-Route::post('/test', function () {
-    return 'Hello World';
-});

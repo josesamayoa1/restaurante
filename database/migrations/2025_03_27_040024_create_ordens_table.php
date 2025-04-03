@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ordens', function (Blueprint $table) {
             $table->id();
             $table->datetime('fecha')->nullable();
-            $table->foreignId('usuario_id')->constrained('usuarios');
+            $table->foreignId('usuario_id')->constrained('users');
             $table->foreignId('mesa_id')->constrained('mesas');
             $table->foreignId('caja_id')->constrained('cajas');
             $table->string('estado')->nullable();
