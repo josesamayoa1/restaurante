@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
 
         // Admin user
         $admin = User::create([
+            'name' => 'Admin',
             'nombre' => 'Admin',
             'apellidos' => 'Restaurante',
             'edad' => 30,
@@ -37,6 +38,7 @@ class DatabaseSeeder extends Seeder
 
         // Cajero
         $cajero = User::create([
+            'name' => 'Cajero',
             'nombre' => 'Juan',
             'apellidos' => 'Perez',
             'edad' => 25,
@@ -47,6 +49,7 @@ class DatabaseSeeder extends Seeder
 
         // Mesero
         $mesero = User::create([
+            'name' => 'Mesero',
             'nombre' => 'Maria',
             'apellidos' => 'Gomez',
             'edad' => 28,
@@ -57,6 +60,7 @@ class DatabaseSeeder extends Seeder
 
         // Cocinero
         $cocinero = User::create([
+            'name' => 'Cocinero',
             'nombre' => 'Carlos',
             'apellidos' => 'Lopez',
             'edad' => 35,

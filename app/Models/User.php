@@ -25,7 +25,6 @@ class User extends Authenticatable
         'email',
         'password',
         'edad',
-        'role_id',
     ];
 
     /**
@@ -78,7 +77,7 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->role_id === 1;
+        return $this->role->name === 'admin';
     }
 
     public function isCajero()
