@@ -14,19 +14,30 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    @if(auth()->user()->hasRole('admin'))
+                        <flux:navlist.item icon="shield-check" :href="route('roles.index')" :current="request()->routeIs('roles.index')" wire:navigate>{{ __('Role') }}</flux:navlist.item>
+                        <flux:navlist.item icon="circle-stack" :href="route('cajas.index')" :current="request()->routeIs('cajas.index')" wire:navigate>{{ __('Cajas') }}</flux:navlist.item>
+                        <flux:navlist.item icon="shopping-cart" :href="route('productos.index')" :current="request()->routeIs('productos.index')" wire:navigate>{{ __('Productos') }}</flux:navlist.item>
+                        <flux:navlist.item icon="rectangle-stack" :href="route('mesas.index')" :current="request()->routeIs('mesas.index')" wire:navigate>{{ __('Mesas') }}</flux:navlist.item>
+
+                    @endif
                 </flux:navlist.group>
             </flux:navlist>
 
             <flux:spacer />
 
             <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                {{ __('Repository') }}
-                </flux:navlist.item>
-
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">
-                {{ __('Documentation') }}
-                </flux:navlist.item>
+                @if(auth()->user()->hasRole('mesero') ||auth()->user()->hasRole('admin'))
+                    <flux:navlist.item icon="cube" :href="route('ordenes.index')" :current="request()->routeIs('ordenes.index')" wire:navigate>{{ __('Mesas') }}</flux:navlist.item>
+                @endif
+                @if(auth()->user()->hasRole('cocinero')||auth()->user()->hasRole('admin') || auth()->user()->hasRole('mesero') )
+                    <flux:navlist.item icon="fire" :href="route('articulos.index')" :current="request()->routeIs('articulos.index')" wire:navigate>{{ __('Artículos') }}</flux:navlist.item>
+                @endif
+                @if(auth()->user()->hasRole('cajero') ||auth()->user()->hasRole('admin'))
+                    <flux:navlist.item icon="clipboard-document" :href="route('cortes.index')" :current="request()->routeIs('cortes.index')" wire:navigate>{{ __('Cortes') }}</flux:navlist.item>
+                    <flux:navlist.item icon="document-text" :href="route('facturas.index')" :current="request()->routeIs('facturas.index')" wire:navigate>{{ __('Facturas') }}</flux:navlist.item>
+                    <flux:navlist.item icon="credit-card" :href="route('pagos.index')" :current="request()->routeIs('pagos.index')" wire:navigate>{{ __('Pagos') }}</flux:navlist.item>
+                @endif
             </flux:navlist>
 
             <!-- Desktop User Menu -->

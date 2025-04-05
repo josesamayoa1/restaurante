@@ -7,6 +7,7 @@ use App\Livewire\Ordenes\Index as OrdenesIndex;
 use App\Livewire\Productos\Index as ProductosIndex;
 use App\Livewire\Mesas\Index as MesasIndex;
 use App\Livewire\Facturas\Index as FacturasIndex;
+use App\Livewire\Pagos\Index as PagosIndex;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -42,18 +43,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Rutas para cajeros
-    Route::middleware(['role:cajero'])->group(function () {
+    Route::middleware(['role:cajero|admin'])->group(function () {
         Route::get('/cortes', CortesIndex::class)->name('cortes.index');
         Route::get('/facturas', FacturasIndex::class)->name('facturas.index');
+        Route::get('/pagos', PagosIndex::class)->name('pagos.index');
+
     });
 
     // Rutas para meseros
-    Route::middleware(['role:mesero'])->group(function () {
+    Route::middleware(['role:mesero|admin'])->group(function () {
         Route::get('/ordenes', OrdenesIndex::class)->name('ordenes.index');
     });
 
     // Rutas para cocineros
-    Route::middleware(['role:cocinero'])->group(function () {
+    Route::middleware(['role:cocinero|admin|mesero'])->group(function () {
         Route::get('/articulos', \App\Livewire\Articulos\Index::class)->name('articulos.index');
     });
 });

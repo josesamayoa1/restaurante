@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Pago extends Model
 {
     use HasFactory;
-    protected $fillable = ['factura_id', 'tipo_pago_id', 'cambio'];
+    protected $fillable = ['factura_id', 'tipo_pago_id', 'cambio', 'monto'];
 
     public function factura()
     {

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('factura_id')->constrained('facturas');
             $table->foreignId('tipo_pago_id')->constrained('tipo_pagos');
             $table->decimal('cambio');
+            $table->decimal('monto');
             $table->timestamps();
         });
     }

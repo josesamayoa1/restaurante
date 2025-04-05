@@ -2,19 +2,19 @@
     <div class="px-4 sm:px-6 lg:px-8">
         <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
-                <h1 class="text-base font-semibold text-gray-900">Cajas</h1>
-                <p class="mt-2 text-sm text-gray-700">Lista de todas las cajas del sistema con sus nombres y acciones disponibles.</p>
+                <h1 class="text-base font-semibold text-gray-900">Pagos</h1>
+                <p class="mt-2 text-sm text-gray-700">Registro de todos los pagos realizados en el sistema.</p>
             </div>
             <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                 <button wire:click="create()" type="button" class="block rounded-md bg-black px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                    Añadir Caja
+                    Nuevo Pago
                 </button>
             </div>
         </div>
 
         <!-- Buscador -->
         <div class="mt-4">
-            <input wire:model.debounce.300ms="search" type="text" placeholder="Buscar cajas..."
+            <input wire:model.debounce.300ms="search" type="text" placeholder="Buscar pagos..."
                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
         </div>
 
@@ -57,30 +57,38 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0">ID</th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Nombre</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Factura</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Mesa</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tipo de Pago</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Monto</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Cambio</th>
                                 <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-0">
                                     <span class="sr-only">Acciones</span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
-                            @forelse ($cajas as $caja)
+                            @forelse ($pagos as $pago)
                                 <tr>
-                                    <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">{{ $caja->id }}</td>
-                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{{ $caja->nombre }}</td>
+                                    <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">{{ $pago->id }}</td>
+                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">#{{ $pago->factura->id }} ({{ $pago->factura->nit }})</td>
+                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{{ $pago->factura->orden->mesa->nombre }}</td>
+                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{{ $pago->tipoPago->nombre }}</td>
+                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">Q.{{ number_format($pago->monto, 2) }}</td>
+                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">Q.{{ number_format($pago->cambio, 2) }}</td>
                                     <td class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                                        <button wire:click="edit({{ $caja->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3">
-                                            Editar<span class="sr-only">, {{ $caja->nombre }}</span>
+                                        <button wire:click="edit({{ $pago->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                            Editar<span class="sr-only">, Pago {{ $pago->id }}</span>
                                         </button>
-                                        <button wire:click="confirmDelete({{ $caja->id }})" class="text-red-600 hover:text-red-900">
-                                            Eliminar<span class="sr-only">, {{ $caja->nombre }}</span>
+                                        <button wire:click="confirmDelete({{ $pago->id }})" class="text-red-600 hover:text-red-900">
+                                            Eliminar<span class="sr-only">, Pago {{ $pago->id }}</span>
                                         </button>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0 text-center">
-                                        No se encontraron cajas.
+                                    <td colspan="7" class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0 text-center">
+                                        No se encontraron pagos.
                                     </td>
                                 </tr>
                             @endforelse
@@ -92,7 +100,7 @@
 
         <!-- Paginación -->
         <div class="mt-4">
-            {{ $cajas->links() }}
+            {{ $pagos->links() }}
         </div>
     </div>
 
@@ -102,7 +110,7 @@
             <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
             <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
                 <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                    <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+                    <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                         <div>
                             <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-blue-100">
                                 <svg class="size-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -111,22 +119,62 @@
                             </div>
                             <div class="mt-3 text-center sm:mt-5">
                                 <h3 class="text-base font-semibold text-gray-900" id="modal-title">
-                                    {{ $caja_id ? 'Editar Caja' : 'Crear Nueva Caja' }}
+                                    {{ $pago_id ? 'Editar Pago' : 'Registrar Pago' }}
                                 </h3>
-                                <div class="mt-2">
+                                <div class="mt-2 space-y-4">
                                     <div>
-                                        <label for="nombre" class="block text-sm/6 font-medium text-gray-900">Nombre de la Caja</label>
+                                        <label for="factura_id" class="block text-sm/6 font-medium text-gray-900">Factura</label>
                                         <div class="mt-2">
-                                            <input wire:model="nombre" id="nombre" type="text" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                                            <select wire:model="factura_id" id="factura_id" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                                                <option value="">Seleccione una factura</option>
+                                                @foreach($facturasPendientes as $factura)
+                                                    <option value="{{ $factura->id }}">#{{ $factura->id }} - Mesa {{ $factura->orden->mesa->nombre }} - Q. {{ number_format($factura->total, 2) }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        @error('nombre') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                        @error('factura_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+
+                                    <div>
+                                        <label for="tipo_pago_id" class="block text-sm/6 font-medium text-gray-900">Tipo de Pago</label>
+                                        <div class="mt-2">
+                                            <select wire:model="tipo_pago_id" id="tipo_pago_id" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                                                <option value="">Seleccione un tipo de pago</option>
+                                                @foreach($tiposPago as $tipo)
+                                                    <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('tipo_pago_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+
+                                    <div>
+                                        <label for="monto" class="block text-sm/6 font-medium text-gray-900">Monto Recibido</label>
+                                        <div class="mt-2 relative rounded-md shadow-sm">
+                                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                                <span class="text-gray-500 sm:text-sm">Q.</span>
+                                            </div>
+                                            <input wire:model="monto" id="monto" type="number" step="0.01" min="0" class="block w-full rounded-md bg-white px-3 py-1.5 pl-7 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                                        </div>
+                                        @error('monto') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+
+                                    <div>
+                                        <label for="cambio" class="block text-sm/6 font-medium text-gray-900">Cambio</label>
+                                        <div class="mt-2 relative rounded-md shadow-sm">
+                                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                                <span class="text-gray-500 sm:text-sm">Q.</span>
+                                            </div>
+                                            <input wire:model="cambio" id="cambio" type="number" step="0.01" min="0" readonly class="block w-full rounded-md bg-gray-100 px-3 py-1.5 pl-7 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 sm:text-sm/6">
+                                        </div>
+                                        @error('cambio') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                             <button wire:click="store" type="button" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2">
-                                {{ $caja_id ? 'Actualizar' : 'Crear' }}
+                                {{ $pago_id ? 'Actualizar' : 'Registrar' }}
                             </button>
                             <button wire:click="closeModal" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0">
                                 Cancelar
@@ -139,7 +187,7 @@
     @endif
 
     <!-- Modal de confirmación para eliminar -->
-    @if ($confirmingCajaDeletion)
+    @if ($confirmingPagoDeletion)
         <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="fixed inset-0 bg-gray-500/10 transition-opacity" aria-hidden="true"></div>
             <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -154,7 +202,7 @@
                             <div class="mt-3 text-center sm:mt-5">
                                 <h3 class="text-base font-semibold text-gray-900" id="modal-title">Confirmar Eliminación</h3>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">¿Estás seguro de que deseas eliminar esta caja? Esta acción no se puede deshacer.</p>
+                                    <p class="text-sm text-gray-500">¿Estás seguro de que deseas eliminar este pago? Esta acción no se puede deshacer.</p>
                                 </div>
                             </div>
                         </div>

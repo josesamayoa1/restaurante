@@ -84,6 +84,12 @@ class Index extends Component
         $this->openModal();
     }
 
+    public function cancelDelete()
+    {
+        $this->confirmingRoleDeletion = false;
+        $this->roleToDelete = null;
+    }
+
     public function confirmDelete($id)
     {
         $this->confirmingRoleDeletion = true;
@@ -92,7 +98,7 @@ class Index extends Component
 
     public function delete()
     {
-        
+
         $role = Role::find($this->roleToDelete);
 
         // Verificar si el rol tiene usuarios asociados
