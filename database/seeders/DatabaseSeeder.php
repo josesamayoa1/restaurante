@@ -93,7 +93,6 @@ class DatabaseSeeder extends Seeder
             ['nombre' => 'Agua mineral', 'descripcion' => 'Agua mineral 500ml', 'precio' => 15],
             ['nombre' => 'Café', 'descripcion' => 'Café americano', 'precio' => 25],
             ['nombre' => 'Postre del día', 'descripcion' => 'Postre variado según temporada', 'precio' => 40],
-            ['nombre' => 'Postre del día', 'descripcion' => 'Postre variado según temporada', 'precio' => 40],
         ];
 
         foreach ($productos as $producto) {
