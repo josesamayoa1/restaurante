@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Articulo extends Model
 {
     use HasFactory;
-    protected $fillable = ['orden_id', 'producto_id', 'cantidad', 'estado'];
+    protected $fillable = ['orden_id', 'producto_id', 'cantidad', 'estado', 'descuento'];
 
     public function orden()
     {

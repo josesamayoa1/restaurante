@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('producto_id')->constrained('productos');
             $table->integer('cantidad');
             $table->string('estado');
+            $table->decimal('descuento')->nullable();
             $table->timestamps();
         });
     }

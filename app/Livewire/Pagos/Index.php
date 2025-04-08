@@ -32,7 +32,7 @@ class Index extends Component
 
     public function mount()
     {
-        $this->facturasPendientes = Factura::where('estado', 'Pendiente')->get();
+        $this->facturasPendientes = Factura::get();
         $this->tiposPago = TipoPago::all();
     }
 

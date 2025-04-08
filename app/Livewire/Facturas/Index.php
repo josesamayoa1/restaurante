@@ -29,7 +29,7 @@ class Index extends Component
     public $previewHtml = '';
 
     protected $rules = [
-        'nit' => 'required|string|max:20',
+        'nit' => 'required|string|min:3|max:20',
         'orden_id' => 'required|exists:ordens,id',
         'total' => 'required|numeric|min:0',
         'iva' => 'required|numeric|min:0',
@@ -48,7 +48,7 @@ class Index extends Component
 
         $this->ordenesDisponibles = Orden::where('estado', 'En uso')
             ->whereDoesntHave('factura')
-            ->when(!$user->hasRole('admin'), function($query) use ($user) {
+            ->when(!$user->hasRole('admin') && !$user->hasRole('cajero'), function($query) use ($user) {
                 $query->where('usuario_id', $user->id);
             })
             ->get();
