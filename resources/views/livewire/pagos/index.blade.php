@@ -71,9 +71,12 @@
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     Tipo de Pago</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    Monto</th>
+                                    Total</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    Monto Recibido</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     Cambio</th>
+
                                 <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-0">
                                     <span class="sr-only">Acciones</span>
                                 </th>
@@ -92,9 +95,13 @@
                                     <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                         {{ $pago->tipoPago->nombre }}</td>
                                     <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                                        Q.{{ number_format($pago->factura->total, 2) }}</td>
+                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                         Q.{{ number_format($pago->monto, 2) }}</td>
                                     <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                         Q.{{ number_format($pago->cambio, 2) }}</td>
+
+
                                     <td
                                         class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                                         <button wire:click="edit({{ $pago->id }})"
