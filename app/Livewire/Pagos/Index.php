@@ -13,14 +13,23 @@ class Index extends Component
     use WithPagination;
 
     public $search = '';
+
     public $isOpen = false;
+
     public $confirmingPagoDeletion = false;
+
     public $pago_id;
+
     public $factura_id;
+
     public $tipo_pago_id;
+
     public $monto;
+
     public $cambio = 0;
+
     public $facturasPendientes;
+
     public $tiposPago;
 
     protected $rules = [
@@ -32,46 +41,55 @@ class Index extends Component
 
     public function mount()
     {
-        $this->facturasPendientes = Factura::get();
+        $this->cargarFacturasPendientes();
         $this->tiposPago = TipoPago::all();
     }
 
-    public function updatedFacturaId()
+    public function cargarFacturasPendientes()
     {
-        if ($this->factura_id) {
-            $factura = Factura::find($this->factura_id);
+        $this->facturasPendientes = Factura::where('estado', 'Pendiente')->get();
+    }
+
+    public function updatedFacturaId($value)
+    {
+        if ($value) {
+            $factura = Factura::find($value);
             $this->monto = $factura->total;
             $this->calcularCambio();
+        } else {
+            $this->reset(['monto', 'cambio']);
         }
     }
 
-    public function updatedMonto()
+    public function updatedMonto($value)
     {
         $this->calcularCambio();
     }
 
     public function calcularCambio()
     {
-        if ($this->factura_id && $this->monto) {
+        if ($this->factura_id && is_numeric($this->monto)) {
             $factura = Factura::find($this->factura_id);
             $this->cambio = max(0, $this->monto - $factura->total);
+        } else {
+            $this->cambio = 0;
         }
     }
 
     public function render()
     {
         $pagos = Pago::with(['factura.orden.mesa', 'tipoPago'])
-            ->where(function($q) {
+            ->where(function ($q) {
                 $q->where('monto', 'like', '%'.$this->search.'%')
-                  ->orWhereHas('factura', function($q) {
-                      $q->where('nit', 'like', '%'.$this->search.'%')
-                        ->orWhereHas('orden.mesa', function($q) {
-                            $q->where('nombre', 'like', '%'.$this->search.'%');
-                        });
-                  })
-                  ->orWhereHas('tipoPago', function($q) {
-                      $q->where('nombre', 'like', '%'.$this->search.'%');
-                  });
+                    ->orWhereHas('factura', function ($q) {
+                        $q->where('nit', 'like', '%'.$this->search.'%')
+                            ->orWhereHas('orden.mesa', function ($q) {
+                                $q->where('nombre', 'like', '%'.$this->search.'%');
+                            });
+                    })
+                    ->orWhereHas('tipoPago', function ($q) {
+                        $q->where('nombre', 'like', '%'.$this->search.'%');
+                    });
             })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -130,7 +148,7 @@ class Index extends Component
 
         $this->closeModal();
         $this->resetInputFields();
-        $this->facturasPendientes = Factura::where('estado', 'Pendiente')->get();
+        $this->cargarFacturasPendientes(); // Actualizar la lista de facturas
     }
 
     public function edit($id)
